@@ -1,0 +1,5 @@
+const CACHE='quiet-place-preview-v2';
+const CORE=['./','./index.html','./meditations.json','./manifest.webmanifest'];
+self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(CORE);await self.skipWaiting()})())});
+self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const k of await caches.keys()){if(k.startsWith('quiet-place-')&&k!==CACHE)await caches.delete(k)}await self.clients.claim()})())});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==self.location.origin||!u.pathname.startsWith(new URL(self.registration.scope).pathname))return;e.respondWith((async()=>{const c=await caches.open(CACHE);const isData=/\.(?:html|json)$/.test(u.pathname)||u.pathname.endsWith('/');if(isData){try{const r=await fetch(e.request);if(r.ok)await c.put(e.request,r.clone());return r}catch{return (await c.match(e.request))||Response.error()}}const hit=await c.match(e.request);if(hit)return hit;const r=await fetch(e.request);if(r.ok)await c.put(e.request,r.clone());return r})())});
