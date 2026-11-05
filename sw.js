@@ -1,4 +1,4 @@
-const CACHE='quiet-place-preview-v2';
+const CACHE='quiet-place-preview-v3';
 const CORE=['./','./index.html','./meditations.json','./manifest.webmanifest'];
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(CORE);await self.skipWaiting()})())});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const k of await caches.keys()){if(k.startsWith('quiet-place-')&&k!==CACHE)await caches.delete(k)}await self.clients.claim()})())});
