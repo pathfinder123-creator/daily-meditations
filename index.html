@@ -75,6 +75,8 @@ if(request!==sceneRequest)return;
 // Display an already-loaded image element on top of the previous scene.
 // Only update the words when the photograph is ready.
 if(activePhoto.dataset.scene!==sceneUrl(m)){
+ // Position the moon inside the portrait crop of scene 024, without changing other scenes.
+ standbyPhoto.style.objectPosition=Number(m.scene)===24?'85% center':'center';
  standbyPhoto.src=prepared.src;
  standbyPhoto.dataset.scene=sceneUrl(m);
  // Wait for the actual DOM image to be ready, not only the preloader.
